@@ -1,0 +1,49 @@
+#グラフの調整
+par(mar=c(0.5,5,1,0.5),
+    mgp=c(3,0.5,0),
+    bty="o",
+    lwd=3,
+    tcl=0.4,
+    ps=18,
+    las=1,
+    mfrow=c(1,1)
+)
+sink("発火数.txt")
+#発火数
+print("発火数")
+fire
+#発火多い順
+print("発火ランキング")
+order(-fire)
+#発火の平均
+print("平均発火数")
+mean(fire)
+sink()
+#hist(fire,xlab="発火頻度 (/min)",ylab="細胞数の割合",freq = F,breaks=6,main="")
+#横400縦250
+f1="発火した細胞の割合.png"
+png(f1,width =400,height = 250 )
+par(mar=c(0.5,5,1,0.5),
+    mgp=c(3,0.5,0),
+    bty="o",
+    lwd=3,
+    tcl=0.4,
+    ps=18,
+    las=1,
+    mfrow=c(1,1)
+)
+barplot(colSums(ras)/ROI,ylim=c(0,1),xlab = "",ylab = "発火した細胞の割合",cex.axis=0.8)
+dev.off()
+
+#20%以上の細胞が同時発火したタイミングが何回あるか
+burst=array(dim=c(Time))
+burst=colSums(ras)/ROI
+nburst=0
+i=1
+while(i<=Time){
+    if(burst[i]>0.2){
+        nburst=nburst+1
+    }
+    i=i+1
+}
+nburst
